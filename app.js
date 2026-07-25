@@ -479,4 +479,5 @@ paintSound();
 
 /* ---------------- go ---------------- */
 tick(); fitChips();
+if (window.innerWidth <= 640) zoomr.value = 1; /* step back by default on mobile */
 (async () => { await loadLiked(); await loadWall(true); })();
