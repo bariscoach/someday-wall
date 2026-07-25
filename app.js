@@ -433,7 +433,7 @@ window.addEventListener('scroll', () => {
 const PLAYLIST_URI = 'spotify:playlist:2q7U9Dh7buTnrwHEWxcxiq';
 const sndbtn = document.getElementById('sndbtn'), icOff = document.getElementById('icoff'), icOn = document.getElementById('icon');
 const playerEl = document.getElementById('player');
-let spot = null, playing = false, wantPlay = true, playLock = 0;
+let spot = null, playing = false, playLock = 0;
 function paintSound() {
   sndbtn.classList.toggle('on', playing);
   sndbtn.setAttribute('aria-pressed', playing ? 'true' : 'false');
@@ -454,23 +454,20 @@ if (window.spotifyReady) {
         spot = ctrl;
         ctrl.addListener('playback_update', e => {
           const p = !!(e && e.data && e.data.isPaused === false);
-          // Ignore spurious isPaused=true events fired immediately after a play command
+          // Ignore transient isPaused=true events within 800ms of a play command
           if (!p && Date.now() < playLock) return;
           if (p !== playing) { playing = p; paintSound(); }
         });
-        if (wantPlay) {
-          wantPlay = false;
-          try { playLock = Date.now() + 800; ctrl.play(); } catch (err) { flashPlayer(6000); }
-        }
       });
   }).catch(() => {});
 }
 sndbtn.onclick = () => {
-  if (!spot) { wantPlay = true; flashPlayer(7000); return; }
+  if (!spot) { flashPlayer(7000); return; }
   try {
     const willPlay = !playing;
-    if (willPlay) playLock = Date.now() + 800;
-    spot.togglePlay(); playing = !playing; paintSound(); flashPlayer(playing ? 2600 : 1400);
+    if (willPlay) { playLock = Date.now() + 800; spot.play(); }
+    else { spot.pause(); }
+    playing = willPlay; paintSound(); flashPlayer(willPlay ? 2600 : 1400);
   } catch (err) { flashPlayer(7000); }
 };
 paintSound();
