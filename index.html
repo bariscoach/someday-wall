@@ -373,7 +373,39 @@
     box-shadow:0 8px 32px rgba(0,0,0,.45); z-index:40; }
   .player.show{ opacity:1; transform:none; pointer-events:auto; }
   .player iframe{ display:block; width:100%; border:0; }
-  @media (max-width:640px){ .cbar{ gap:9px; } .sndbtn{ width:38px; height:38px; } }
+  /* ============ responsive ============ */
+  @media (max-width:640px) {
+    /* hide ⌘↵ hint — prevents cbar overflow */
+    .lay kbd{ display:none; }
+    .cbar{ gap:9px; }
+    .sndbtn{ width:38px; height:38px; }
+  }
+  @media (max-width:520px) {
+    /* header: shrink logo + hide "Top Bricks" label to fix overflow on 375 px phones */
+    .top{ padding:14px 16px 0; gap:10px; }
+    .logo{ width:clamp(130px,35vw,180px); }
+    .topbtn-label{ display:none; }
+    .topbtn-pill{ padding:0 9px; }
+    /* player popup: prevent left-overflow on narrow screens */
+    .player{ width:min(290px,calc(100vw - 32px)); }
+    /* tighten layout */
+    .hero{ padding:4vh 16px 20px; }
+    .wallbar{ padding:0 14px; }
+    .wall{ padding:16px 10px 20px; }
+  }
+  @media (max-width:380px) {
+    /* very small phones (SE): hide colour name, show dot + caret only */
+    .logo{ width:clamp(110px,30vw,140px); }
+    .clayname{ display:none; }
+    .claybtn{ padding:0 9px; gap:6px; }
+  }
+  /* Touch devices: disable stuck-hover state on bricks (iOS keeps :hover after tap) */
+  @media (hover:none) {
+    .brick:hover{ transform:none !important; filter:none !important; z-index:auto !important; }
+    .brick.lg:hover{ box-shadow:inset 0 1px 0 rgba(255,255,255,.3), inset 0 -2px 4px rgba(0,0,0,.34), 0 2px 5px rgba(0,0,0,.5), 0 0 0 1px rgba(0,0,0,.3) !important; }
+    .brick.mine:hover{ box-shadow:inset 0 0 0 2px #F6F3EE, 0 0 0 1px rgba(0,0,0,.5), 0 0 22px -3px currentColor !important; }
+    .brick.lg:hover::after{ transform:translateX(-135%); }
+  }
 </style>
 </head>
 <body>
@@ -408,7 +440,7 @@
           <rect x="17" y="12" width="5" height="5" rx="1.2"/>
           <rect x="2" y="12" width="2" height="5" rx="1.2"/>
         </svg>
-        Top Bricks
+        <span class="topbtn-label">Top Bricks</span>
       </button>
       <div class="toppanel" id="toppanel" role="listbox" aria-label="Top bricks">
         <div class="tophead"><span>Top bricks</span><span id="tophint">by hearts</span></div>
