@@ -454,10 +454,14 @@ if (window.spotifyReady) {
         spot = ctrl;
         ctrl.addListener('playback_update', e => {
           const p = !!(e && e.data && e.data.isPaused === false);
-          // Ignore transient isPaused=true events within 800ms of a play command
+          // Ignore spurious isPaused=true events for 3s after a play command
           if (!p && Date.now() < playLock) return;
           if (p !== playing) { playing = p; paintSound(); }
         });
+        // Autoplay: optimistically show playing, then let ctrl.play() confirm
+        playLock = Date.now() + 3000;
+        playing = true; paintSound();
+        try { ctrl.play(); } catch (err) { playing = false; paintSound(); }
       });
   }).catch(() => {});
 }
@@ -465,8 +469,8 @@ sndbtn.onclick = () => {
   if (!spot) { flashPlayer(7000); return; }
   try {
     const willPlay = !playing;
-    if (willPlay) { playLock = Date.now() + 800; spot.play(); }
-    else { spot.pause(); }
+    if (willPlay) playLock = Date.now() + 800;
+    spot.togglePlay();
     playing = willPlay; paintSound(); flashPlayer(willPlay ? 2600 : 1400);
   } catch (err) { flashPlayer(7000); }
 };
