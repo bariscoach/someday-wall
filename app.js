@@ -323,9 +323,9 @@ async function lay() {
       mine.add(String(brick.id)); saveSet(LS_MINE, mine);
       freshId = String(brick.id);
       draw();
-      setMsg(is_new ? ‘Laid. Yours is outlined in white near the top.’
-                    : ‘Someone already wrote this — you’re on their brick now.’, ‘good’);
-      clearTimeout(msgTimer); msgTimer = setTimeout(() => setMsg(‘’), 5000);
+      setMsg(is_new ? 'Laid. Yours is outlined in white near the top.'
+                    : "Someone already wrote this \u2014 you're on their brick now.", 'good');
+      clearTimeout(msgTimer); msgTimer = setTimeout(() => setMsg(''), 5000);
       setTimeout(() => { freshId = null; }, 2800);
       wall.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
@@ -338,7 +338,7 @@ async function lay() {
 function joinExisting(twin, silent) {
   mine.add(String(twin.id)); saveSet(LS_MINE, mine);
   ta.value = ''; tick(); draw();
-  if (!silent) setMsg('Someone already wrote this — you’re on their brick now.', 'good');
+  if (!silent) setMsg("Someone already wrote this \u2014 you're on their brick now.", 'good');
   openSheet(twin); pulse(twin.id);
 }
 addBtn.onclick = lay;
