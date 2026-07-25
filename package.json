@@ -1,0 +1,13 @@
+{
+  "name": "someday-wall",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "One day, I will… — a wall of bricks written by strangers.",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.4"
+  }
+}
