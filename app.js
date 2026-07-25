@@ -344,7 +344,8 @@ addBtn.onclick = lay;
 ta.addEventListener('keydown', e => { if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') { e.preventDefault(); lay(); } });
 
 /* ---------------- spotlight ---------------- */
-document.getElementById('spot').onclick = () => {
+const spotBtn = document.getElementById('spot');
+if (spotBtn) spotBtn.onclick = () => {
   if (tiles.length) openSheet(tiles[Math.floor(Math.random() * tiles.length)]);
 };
 
