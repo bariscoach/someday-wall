@@ -361,7 +361,13 @@
   .eq i{ width:2.5px; background:currentColor; animation:eqbar 1.05s var(--ease) infinite alternate; }
   .eq i:nth-child(1){ height:6px; } .eq i:nth-child(2){ height:15px; animation-delay:.16s; } .eq i:nth-child(3){ height:9px; animation-delay:.34s; }
   @keyframes eqbar{ to{ height:3px; } }
-  .player{ display:none; }
+  .player{ position:absolute; right:0; top:calc(100% + 10px); width:290px;
+    opacity:0; transform:translateY(-4px) scale(.97); pointer-events:none;
+    transition:opacity .18s,transform .2s var(--spring);
+    background:var(--card); border:1px solid var(--line); border-radius:14px; overflow:hidden;
+    box-shadow:0 8px 32px rgba(0,0,0,.45); z-index:40; }
+  .player.show{ opacity:1; transform:none; pointer-events:auto; }
+  .player iframe{ display:block; width:100%; border:0; }
   @media (max-width:640px){ .cbar{ gap:9px; } .sndbtn{ width:38px; height:38px; } }
 </style>
 </head>
@@ -387,7 +393,7 @@
   </a>
 
   <div class="radiodock">
-    <div class="player" id="player"></div>
+    <div class="player" id="player"><div id="spotholder"></div></div>
     <div class="pop">
       <button class="topbtn-pill" id="topbtn" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="Top bricks">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -494,7 +500,6 @@
   </svg>
   Surprise me
 </button>
-<div id="spotholder" style="position:fixed;left:-9999px;top:0;width:290px;height:80px;overflow:hidden;" aria-hidden="true"></div>
 <script src="/app.js"></script>
 
 </body>

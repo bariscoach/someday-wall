@@ -458,10 +458,10 @@ if (window.spotifyReady) {
           if (!p && Date.now() < playLock) return;
           if (p !== playing) { playing = p; paintSound(); }
         });
-        // Autoplay: optimistically show playing, then let ctrl.play() confirm
+        // Try autoplay; if blocked, flash the player so user can click it directly
         playLock = Date.now() + 3000;
-        playing = true; paintSound();
-        try { ctrl.play(); } catch (err) { playing = false; paintSound(); }
+        try { ctrl.play(); } catch (err) {}
+        setTimeout(() => { if (!playing) flashPlayer(8000); }, 2500);
       });
   }).catch(() => {});
 }
