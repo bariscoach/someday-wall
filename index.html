@@ -182,13 +182,58 @@
   /* ============ wall ============ */
   .wallsec{ position:relative; z-index:2; margin-top:40px; padding-bottom:6vh; }
   .wallbar{ max-width:1240px; margin:0 auto 12px; padding:0 22px; }
-  .wallhead{ display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; }
+  .wallhead{ display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .wallhead .pop{ margin-left:auto; }
   .wallbar h2{ font-size:14px; font-weight:500; margin:0; color:var(--ink-soft); letter-spacing:-.01em; }
   .stat{ font-size:12.5px; color:var(--ink-faint); font-variant-numeric:tabular-nums; }
   .tools{ display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; margin-top:9px; }
   .toolset{ display:flex; align-items:center; gap:11px; }
   .tools .lbl{ font-size:11.5px; color:var(--ink-faint); }
   input[type=range]{ width:140px; accent-color:#D9A88F; }
+
+  /* floating surprise-me button */
+  .floatspot{
+    position:fixed; bottom:28px; right:24px; z-index:40;
+    height:46px; padding:0 18px 0 13px; border-radius:999px; cursor:pointer;
+    background:rgba(16,14,26,.88); border:1px solid rgba(255,255,255,.16);
+    backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    color:var(--ink); font:inherit; font-size:14px; font-weight:500;
+    display:flex; align-items:center; gap:9px;
+    box-shadow:0 4px 24px -6px rgba(0,0,0,.8);
+    transition:transform .35s var(--spring), box-shadow .3s, border-color .3s, background .2s;
+    animation:spotpulse 3.6s ease-in-out infinite;
+  }
+  .floatspot svg{ width:15px; height:15px; flex:0 0 auto; }
+  .floatspot:hover{
+    transform:translateY(-3px); animation:none;
+    background:rgba(26,22,42,.92); border-color:rgba(255,255,255,.32);
+    box-shadow:0 8px 36px -8px rgba(0,0,0,.9), 0 0 30px -4px rgba(124,107,245,.5);
+  }
+  .floatspot:active{ transform:translateY(-1px) scale(.97); }
+  .floatspot:focus-visible{ outline:2px solid var(--line-hi); outline-offset:3px; }
+  @keyframes spotpulse{
+    0%,100%{ box-shadow:0 4px 24px -6px rgba(0,0,0,.8), 0 0 0 1px rgba(255,255,255,.04); }
+    50%{ box-shadow:0 4px 24px -6px rgba(0,0,0,.8), 0 0 28px -2px rgba(124,107,245,.4), 0 0 0 1px rgba(124,107,245,.22); }
+  }
+
+  /* top 100 pill button */
+  .topbtn-pill{
+    height:34px; padding:0 13px 0 10px; border-radius:999px; cursor:pointer;
+    font:inherit; font-size:13px; font-weight:500;
+    display:inline-flex; align-items:center; gap:7px;
+    background:rgba(201,134,43,.1); border:1px solid rgba(201,134,43,.3); color:#D9A060;
+    transition:background .2s, border-color .2s, box-shadow .3s, transform .35s var(--spring), color .2s;
+  }
+  .topbtn-pill svg{ width:14px; height:14px; flex:0 0 auto; }
+  .topbtn-pill:hover{
+    background:rgba(201,134,43,.2); border-color:rgba(201,134,43,.55); color:#F0C36A;
+    box-shadow:0 0 22px -4px rgba(201,134,43,.45); transform:translateY(-1px);
+  }
+  .topbtn-pill:focus-visible{ outline:2px solid rgba(201,134,43,.6); outline-offset:2px; }
+  .topbtn-pill[aria-expanded="true"]{
+    background:rgba(201,134,43,.22); border-color:rgba(201,134,43,.65); color:#F0C36A;
+    box-shadow:0 0 22px -4px rgba(201,134,43,.4);
+  }
 
   /* top bricks panel */
   .pop{ position:relative; }
@@ -397,38 +442,27 @@
     <div class="wallhead">
       <h2>The wall</h2>
       <span class="stat" id="stat">loading&hellip;</span>
+      <div class="pop">
+        <button class="topbtn-pill" id="topbtn" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="Top bricks">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M8 4h8v4.5a4 4 0 0 1-8 0V4z"/>
+            <path d="M8 5.5H5.6a2.4 2.4 0 0 0 0 4.8H8"/>
+            <path d="M16 5.5h2.4a2.4 2.4 0 0 1 0 4.8H16"/>
+            <path d="M12 12.5V16"/><path d="M9 20h6"/><path d="M10.4 20l.4-4h2.4l.4 4"/>
+          </svg>
+          Top 100
+        </button>
+        <div class="toppanel" id="toppanel" role="listbox" aria-label="Top bricks">
+          <div class="tophead"><span>Top 100 bricks</span><span id="tophint">by hearts</span></div>
+          <div class="toplist" id="toplist"></div>
+        </div>
+      </div>
     </div>
     <div class="tools">
       <div class="toolset">
         <span class="lbl">step back</span>
         <input type="range" id="zoomr" min="0" max="5" step="1" value="3" aria-label="Zoom" />
         <span class="lbl">lean in</span>
-      </div>
-      <div class="toolset">
-        <div class="tip">
-          <button class="iconbtn" id="spot" type="button" aria-label="Show me a brick at random">
-            <svg viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true">
-              <path d="M10.4 2.6l1.75 4.6 4.6 1.75-4.6 1.75-1.75 4.6-1.75-4.6L4.05 8.95l4.6-1.75z"/>
-              <path d="M17.6 13.4l.95 2.5 2.5.95-2.5.95-.95 2.5-.95-2.5-2.5-.95 2.5-.95z"/>
-            </svg>
-          </button>
-          <span class="tiptext" role="tooltip">Show me a brick at random</span>
-        </div>
-        <div class="tip pop">
-          <button class="iconbtn" id="topbtn" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="Top bricks">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M8 4h8v4.5a4 4 0 0 1-8 0V4z"/>
-              <path d="M8 5.5H5.6a2.4 2.4 0 0 0 0 4.8H8"/>
-              <path d="M16 5.5h2.4a2.4 2.4 0 0 1 0 4.8H16"/>
-              <path d="M12 12.5V16"/><path d="M9 20h6"/><path d="M10.4 20l.4-4h2.4l.4 4"/>
-            </svg>
-          </button>
-          <span class="tiptext" role="tooltip">Top bricks &mdash; most hearts first</span>
-          <div class="toppanel" id="toppanel" role="listbox" aria-label="Top bricks">
-            <div class="tophead"><span>Top 100 bricks</span><span id="tophint">by hearts</span></div>
-            <div class="toplist" id="toplist"></div>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -458,6 +492,14 @@
 </div>
 
 <script src="/app.js"></script>
+
+<button class="floatspot" id="spot" type="button" aria-label="Show me a brick at random">
+  <svg viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true">
+    <path d="M10.4 2.6l1.75 4.6 4.6 1.75-4.6 1.75-1.75 4.6-1.75-4.6L4.05 8.95l4.6-1.75z"/>
+    <path d="M17.6 13.4l.95 2.5 2.5.95-2.5.95-.95 2.5-.95-2.5-2.5-.95 2.5-.95z"/>
+  </svg>
+  Surprise me
+</button>
 
 </body>
 </html>
