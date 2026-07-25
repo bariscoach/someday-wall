@@ -459,10 +459,12 @@ if (window.spotifyReady) {
           if (!p && Date.now() < playLock) return;
           if (p !== playing) { playing = p; paintSound(); }
         });
-        // Try autoplay; if blocked, flash the player so user can click it directly
-        playLock = Date.now() + 3000;
-        try { ctrl.play(); } catch (err) {}
-        setTimeout(() => { if (!playing) flashPlayer(8000); }, 2500);
+        // Autoplay on desktop only; mobile requires an explicit user tap
+        if (window.innerWidth > 640) {
+          playLock = Date.now() + 3000;
+          try { ctrl.play(); } catch (err) {}
+          setTimeout(() => { if (!playing) flashPlayer(8000); }, 2500);
+        }
       });
   }).catch(() => {});
 }
