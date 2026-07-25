@@ -432,7 +432,7 @@ window.addEventListener('scroll', () => {
 const PLAYLIST_URI = 'spotify:playlist:2q7U9Dh7buTnrwHEWxcxiq';
 const sndbtn = document.getElementById('sndbtn'), icOff = document.getElementById('icoff'), icOn = document.getElementById('icon');
 const playerEl = document.getElementById('player');
-let spot = null, playing = false, wantPlay = false;
+let spot = null, playing = false, wantPlay = true;
 function paintSound() {
   sndbtn.classList.toggle('on', playing);
   sndbtn.setAttribute('aria-pressed', playing ? 'true' : 'false');
