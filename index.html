@@ -106,9 +106,14 @@
   .field textarea:hover{ background:rgba(255,255,255,.055); }
   .field textarea:focus{ background:rgba(255,255,255,.07); border-color:var(--line-hi);
     box-shadow:0 0 0 4px rgba(224,120,77,.14); }
-  .ghost{ position:absolute; left:21px; top:16px; right:16px; pointer-events:none; color:rgba(246,243,238,.28);
+  .ghost{ position:absolute; left:21px; top:16px; right:16px; pointer-events:none;
     font-size:19px; line-height:1.5; letter-spacing:-.01em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-    transition:opacity .3s; }
+    transition:opacity .3s;
+    background:linear-gradient(90deg,rgba(246,243,238,.28) 0%,rgba(246,243,238,.28) 20%,#C9862B 40%,#C0552F 50%,rgba(246,243,238,.6) 60%,rgba(246,243,238,.28) 80%,rgba(246,243,238,.28) 100%);
+    background-size:300% 100%; background-position:100% center;
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    animation:ghostShimmer 1.6s var(--ease) .5s 1 forwards; }
+  @keyframes ghostShimmer{ from{background-position:100% center} to{background-position:0% center} }
 
   .chips{ display:flex; gap:6px; padding:10px 8px 2px; height:44px; overflow:hidden; align-items:center; }
   .chip{ flex:0 0 auto; height:30px; padding:0 13px; border-radius:999px; cursor:pointer; white-space:nowrap;

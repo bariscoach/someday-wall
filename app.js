@@ -43,7 +43,7 @@ let liked = new Set();          /* authoritative copy comes from the server */
 
 /* ---------------- state ---------------- */
 let tiles = [], index = new Map(), offline = false;
-let active = null, freshId = null, loading = false, done = false;
+let active = null, freshId = null, loading = false, done = false, msgTimer;
 
 function norm(s) {
   return String(s).toLowerCase().replace(/[’‘`']/g, "'").replace(/\s+/g, ' ').replace(/[.…!?,;:]+$/, '').trim();
@@ -323,8 +323,9 @@ async function lay() {
       mine.add(String(brick.id)); saveSet(LS_MINE, mine);
       freshId = String(brick.id);
       draw();
-      setMsg(is_new ? 'Laid. Yours is outlined in white near the top.'
-                    : 'Someone already wrote this — you’re on their brick now.', 'good');
+      setMsg(is_new ? ‘Laid. Yours is outlined in white near the top.’
+                    : ‘Someone already wrote this — you’re on their brick now.’, ‘good’);
+      clearTimeout(msgTimer); msgTimer = setTimeout(() => setMsg(‘’), 5000);
       setTimeout(() => { freshId = null; }, 2800);
       wall.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
